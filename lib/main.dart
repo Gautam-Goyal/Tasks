@@ -4,7 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:task2/HomePage.dart';
 import 'package:task2/login.dart';
-
+import 'package:fluttertoast/fluttertoast.dart';
 import 'authentication.dart';
 
 Future<void> main() async{
@@ -45,8 +45,31 @@ class AuthenticationWrapper extends StatelessWidget {
     final firebaseUser = context.watch<User>();
 
     if(firebaseUser != null){
+      print("HomePage");
+      // Fluttertoast.showToast(
+      //     msg: "Logged In",
+      //     toastLength: Toast.LENGTH_SHORT,
+      //     gravity: ToastGravity.CENTER,
+      //     timeInSecForIosWeb: 1,
+      //     backgroundColor: Colors.red,
+      //     textColor: Colors.white,
+      //     fontSize: 16.0
+      // );
       return HomePage();
     }
-    return LoginPage();
+    else{
+      print("Login Page");
+      // Fluttertoast.showToast(
+      //     msg: "Not Valid ID",
+      //     toastLength: Toast.LENGTH_SHORT,
+      //     gravity: ToastGravity.CENTER,
+      //     timeInSecForIosWeb: 1,
+      //     backgroundColor: Colors.red,
+      //     textColor: Colors.white,
+      //     fontSize: 16.0
+      // );
+      return LoginPage();
+    }
+    // return LoginPage();
   }
 }

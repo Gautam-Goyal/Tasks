@@ -1,3 +1,4 @@
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:task2/iconandtext.dart';
 import 'package:flutter/material.dart';
@@ -147,7 +148,7 @@ class _LoginPageState extends State<LoginPage> {
                                 top: _headingTop,
                               ),
                               child: Text(
-                                "Green Earth",
+                                "Task 2",
                                 style: TextStyle(
                                     color: _headingColor,
                                     fontSize: 28
@@ -160,7 +161,7 @@ class _LoginPageState extends State<LoginPage> {
                                   horizontal: 32
                               ),
                               child: Text(
-                                "My waste ,My responsibility!!",
+                                "Task 2 login app",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: _headingColor,
@@ -261,7 +262,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   GestureDetector(
                     onTap:(){
-                      Provider.of<Authentication>(context).signIn(
+                      Provider.of<Authentication>(context, listen: false).signIn(
                         email:loginUsernameController.text,
                         password: loginPasswordController.text
                       );
@@ -336,7 +337,26 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   GestureDetector(
                     onTap:() async {
-
+                      var result=await Provider.of<Authentication>(context, listen: false).signUp(
+                          email:signupUsernameController.text,
+                          password: signupPasswordController.text
+                      );
+                      setState(() {
+                        _isloading=true;
+                        _pageState = 1;
+                      });
+                      if(result.toString() =="SignedUp"){
+                        setState(() {
+                          _isloading=false;
+                          Fluttertoast.showToast(msg: "Signed Up!",toastLength: Toast.LENGTH_SHORT);
+                        });
+                      }
+                      else{
+                        setState(() {
+                          Fluttertoast.showToast(msg: result.toString(),toastLength: Toast.LENGTH_SHORT);
+                          _isloading=false;
+                        });
+                      }
                     },
                     child: PrimaryButton(
                       btnText: "Create Account",
