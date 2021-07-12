@@ -261,11 +261,26 @@ class _LoginPageState extends State<LoginPage> {
                     passwordController: loginPasswordController,
                   ),
                   GestureDetector(
-                    onTap:(){
-                      Provider.of<Authentication>(context, listen: false).signIn(
-                        email:loginUsernameController.text,
-                        password: loginPasswordController.text
-                      );
+                    onTap:() async {
+                      if (formkey1.currentState.validate() == true) {
+                        var result= await Provider.of<Authentication>(context, listen: false)
+                            .signIn(
+                            email: loginUsernameController.text,
+                            password: loginPasswordController.text
+                        );
+                        if (result.toString() == "SignedIn") {
+                          setState(() {
+                            Fluttertoast.showToast(msg: "Signed In!",
+                                toastLength: Toast.LENGTH_SHORT);
+                          });
+                        }
+                        else {
+                          setState(() {
+                            Fluttertoast.showToast(msg: result.toString(),
+                                toastLength: Toast.LENGTH_SHORT);
+                          });
+                        }
+                      }
                     },
                     child: PrimaryButton(
                       btnText: "Login",
@@ -337,25 +352,30 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   GestureDetector(
                     onTap:() async {
-                      var result=await Provider.of<Authentication>(context, listen: false).signUp(
-                          email:signupUsernameController.text,
-                          password: signupPasswordController.text
-                      );
-                      setState(() {
-                        _isloading=true;
-                        _pageState = 1;
-                      });
-                      if(result.toString() =="SignedUp"){
+                      if (formkey2.currentState.validate() == true) {
+                        var result = await Provider.of<Authentication>(
+                            context, listen: false).signUp(
+                            email: signupUsernameController.text,
+                            password: signupPasswordController.text
+                        );
                         setState(() {
-                          _isloading=false;
-                          Fluttertoast.showToast(msg: "Signed Up!",toastLength: Toast.LENGTH_SHORT);
+                          _isloading = true;
+                          _pageState = 1;
                         });
-                      }
-                      else{
-                        setState(() {
-                          Fluttertoast.showToast(msg: result.toString(),toastLength: Toast.LENGTH_SHORT);
-                          _isloading=false;
-                        });
+                        if (result.toString() == "SignedUp") {
+                          setState(() {
+                            _isloading = false;
+                            Fluttertoast.showToast(msg: "Signed Up!",
+                                toastLength: Toast.LENGTH_SHORT);
+                          });
+                        }
+                        else {
+                          setState(() {
+                            Fluttertoast.showToast(msg: result.toString(),
+                                toastLength: Toast.LENGTH_SHORT);
+                            _isloading = false;
+                          });
+                        }
                       }
                     },
                     child: PrimaryButton(
@@ -403,33 +423,6 @@ class _LoginPageState extends State<LoginPage> {
       context:context,
       builder:(BuildContext context){
         return alert;
-      },
-    );
-  }
-
-  Future<void> _showMyDialoglogin(BuildContext context,int statuscode) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Error'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                statuscode==422?Text('Invalid email or password. Please try again!'):Text('Authorisation was failed with status code $statuscode'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
       },
     );
   }

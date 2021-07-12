@@ -4,7 +4,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:task2/HomePage.dart';
 import 'package:task2/login.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'authentication.dart';
 
 Future<void> main() async{
